@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Game Suggester</title>
+  <style>
+    :root {
+      --bg: #f3f6ef;
+      --panel: #fbfdf8;
+      --ink: #1d2a22;
+      --muted: #5e6d63;
+      --line: #d9e4d8;
+      --accent: #1f8a70;
+      --accent-2: #f4a259;
+      --danger: #ba3f1d;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: "Trebuchet MS", "PingFang SC", "Microsoft YaHei", sans-serif;
+      background:
+        radial-gradient(circle at 0 0, #d8efe7 0, transparent 34%),
+        radial-gradient(circle at 100% 100%, #fff0db 0, transparent 36%),
+        var(--bg);
+      min-height: 100vh;
+    }
+
+    main {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 28px 16px 48px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: 0 14px 28px rgba(12, 25, 16, 0.08);
+      padding: 18px;
+    }
+
+    h1,
+    h2 {
+      margin: 0 0 10px;
+    }
+
+    p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    input,
+    button {
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      padding: 10px 12px;
+      font-size: 15px;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(31, 138, 112, 0.12);
+    }
+
+    button {
+      background: linear-gradient(120deg, var(--accent), #2f9f84);
+      border-color: transparent;
+      color: #fff;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: wait;
+    }
+
+    .status {
+      margin-top: 10px;
+      color: var(--accent);
+      font-weight: 600;
+      min-height: 22px;
+    }
+
+    .status.error {
+      color: var(--danger);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 18px;
+    }
+
+    pre {
+      margin: 0;
+      background: #eef6f1;
+      border: 1px solid #d6e6dc;
+      border-radius: 12px;
+      padding: 12px;
+      overflow: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .tag {
+      display: inline-block;
+      background: #ecf8f4;
+      color: #1b7f67;
+      border: 1px solid #cce8de;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+
+    @media (max-width: 560px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="card">
+      <div class="tag">Lesson 02 / game_suggester</div>
+      <h1>游戏建议助手</h1>
+      <p>输入房间号后，系统会调用快照接口生成候选方案，再通过 <code>evaluate_move</code> 持续验证，直到得到合法建议。</p>
+      <div class="form-row">
+        <input id="roomCode" placeholder="请输入房间号，例如 ABC123" maxlength="12">
+        <button id="suggestBtn" type="button">生成建议</button>
+      </div>
+      <div id="status" class="status"></div>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <h2>快照摘要</h2>
+        <pre id="snapshot">{}</pre>
+      </article>
+      <article class="card">
+        <h2>最终建议 JSON</h2>
+        <pre id="suggestion">{}</pre>
+      </article>
+      <article class="card">
+        <h2>评估结果</h2>
+        <pre id="evaluation">{}</pre>
+      </article>
+      <article class="card">
+        <h2>尝试过程</h2>
+        <pre id="attempts">[]</pre>
+      </article>
+    </section>
+  </main>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
